@@ -4,8 +4,8 @@
   "description": "A FullStack project I did at HRR.",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "./node_modules/.bin/webpack-dev-server --content-base dist --inline --hot",
-    "server-dev": "nodemon --inspect server/server.js",
+    "start": "./node_modules/.bin/webpack-dev-server --content-base ./client/dist --inline --hot",
+    "server-dev": "nodemon --inspect server/index.js",
     "client-dev": "./node_modules/.bin/babel ./client/prod/* --watch --out-dir ./client/dist/compiled --presets=es2015,react --ignore=node_modules,dist --source-maps inline",
     "clientTest": "live-server --open=./client/SpecRunner.html --port=8081"
   },

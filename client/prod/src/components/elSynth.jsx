@@ -37,7 +37,6 @@ class Synth extends React.Component {
       <div className="keyboard">
         {keys.map(key => <button onClick={(e) => this.handleMouseClick(e)}>{key.note}</button>)}
       </div>
-
       )
   }
 }

@@ -10,6 +10,6 @@ pids
 logs
 results
 
-client/dist/L1.min.js
+client/dist/bundle.min.js
 config.js
 

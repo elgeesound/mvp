@@ -16,6 +16,7 @@ class App extends React.Component {
     return (
       <div>
         <Test />
+        <Synth />
       </div>
       )
   }

@@ -16,6 +16,7 @@ class Synth extends React.Component {
       toggleOn: false,
       currentWave: null,
       recording: false,
+      recCount: 0,
       currentRecord: [],
       fx: {
           'BitCrusher': [false, 0],
@@ -34,11 +35,13 @@ class Synth extends React.Component {
   }
 
   handleMouseKeyboardClick = (e) => {
+    let hold = e.target.textContent;
     this.synth.triggerAttackRelease(e.target.textContent, '8n');
     if (this.state.recording) {
       this.setState({
-        currentRecord: currentRecord.push(e.target.textContent)
+        currentRecord: [...this.state.currentRecord, hold]
       });
+      console.log(this.state.currentRecord);
     }
   };
 
@@ -48,6 +51,22 @@ class Synth extends React.Component {
     fx[e.target.textContent][0] = !this.state.fx[e.target.textContent][0];
     this.setState({fx});
     console.log(this.state.fx);
+  };
+
+  handleRecToggle = (e) => {
+    let val = this.state.recCount;
+    val++;
+    this.setState({
+      recording: !this.state.recording,
+      recCount: val
+    });
+
+    if ( (val !== 0 && val % 2 === 0) && this.state.currentRecord[0] !== undefined ) {
+      console.log('recorded');
+    }
+
+    console.log(this.state.recCount, 'this is recCount');
+
   };
 
 
@@ -61,15 +80,17 @@ class Synth extends React.Component {
           <div className="effectsBar">
             {fx.map(effect => <button key={effect} style={{backgroundColor: this.state.fx[effect][0] ? 'green' : 'yellow'}} onClick={(e) => this.handleEffectsToggle(e)}>{effect}</button>)}
           </div>
-          <button style={{
-            borderWidth:1,
-            borderColor:'rgba(0,0,0,0.2)',
-            alignItems:'center',
-            justifyContent:'center',
-            width:100,
-            height:100,
-            backgroundColor:'#fff',
-            borderRadius:100,
+          <button
+            onClick={(e) => this.handleRecToggle(e)}
+            style={{
+              borderWidth: this.state.recording ? 10 : 1,
+              borderColor:this.state.recording ? 'red' : 'black',
+              alignItems:'center',
+              justifyContent:'center',
+              width:100,
+              height:100,
+              backgroundColor:'#fff',
+              borderRadius:100,
             }}>REC</button>
         </div>
       </container>

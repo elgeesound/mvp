@@ -15,6 +15,8 @@ class Synth extends React.Component {
       keys: [{note: 'C4'}, {note: 'D4'}, {note: 'E4'}, {note: 'F4'}],
       toggleOn: false,
       currentWave: null,
+      recording: false,
+      currentRecord: [],
       fx: {
           'BitCrusher': [false, 0],
           'Chorus': [false, 0],
@@ -27,8 +29,17 @@ class Synth extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    console.log('check');
+  }
+
   handleMouseKeyboardClick = (e) => {
-    this.synth.triggerAttackRelease(e.target.textContent, '1n');
+    this.synth.triggerAttackRelease(e.target.textContent, '8n');
+    if (this.state.recording) {
+      this.setState({
+        currentRecord: currentRecord.push(e.target.textContent)
+      });
+    }
   };
 
   handleEffectsToggle = (e) => {

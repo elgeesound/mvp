@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
 let seqSchema = new Schema({
   index: Number,
   updated: { type: Date, default: Date.now },

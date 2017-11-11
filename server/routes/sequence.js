@@ -5,9 +5,21 @@ const Seq = require('../../database/models/Sequence.js').Seq;
 
 
 router.get('/', (req, res, next) => {
-  res.send('ALL IS GOOD IN THE WORLD');
+  // Seq.find((err, res) => {
+  //   if (err) return next(err);
+  //   res.json(res);
+  // })
+  res.send('Exprezz');
+});
+
+router.post('/', (req, res, next) => {
+  console.log('req', req.body);
+  // Seq.create(req.body, (err, res) => {
+  //   if (err) return next(err);
+  //   res.json(res)
+  // })
+  res.send('hello word');
 });
 
 
-
-module.exports = router;
+module.exports.seq = router;

@@ -75,7 +75,7 @@ class Synth extends React.Component {
         'sequence': this.state.currentRecord
       }
       // REFACTOR TO AXIOS POST REQ
-      axios.post('http://localhost:1128/seq', data).then((res) => {console.log('Succesful saved sequence')}).catch((err) => {console.log(err)});
+      axios.post('http://localhost:3000/', data).then((res) => {console.log('Succesful saved sequence')}).catch((err) => {console.log(err)});
       // axios({
       //   method: 'POST',
       //   url: 'http://127.0.0.1:3000/seq',

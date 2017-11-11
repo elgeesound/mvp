@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-const Schema = mongoose.Schema;
 
 // mongo/mongoose
 const uri = 'mongodb://localhost/mvp'
@@ -21,12 +20,6 @@ mongoose.connect(uri, {
 // });
 
 let save = (data) => {
-  let sequence = new Seq({
-    index: data.idx,
-    updated: data.timeStamp,
-    sequence: data.sequence
-  });
-
   sequence.save((err, seq) => {
     if (err) { throw err };
     console.log('Successful Save')

@@ -1,39 +1,53 @@
 /* DEPENDENCIES */
 const express = require('express');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const path = require('path');
 var cors = require('cors');
-let db = require('../database/index.js');
-let save = require('../database/index.js').save;
-let Seq = require('../database/index.js').Sequence;
+
+
+var db = require('../database/index.js');
+var seq = require('./routes/sequence.js').seq;
+var save = require('../database/index.js').save;
+
 
 /* INITIALIZE */
 //express
 var app = express();
-app.use(bodyParser.json);
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(__dirname + '/../client/dist'));
+app.use(morgan('dev'));
+// app.use(bodyParser.json);
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(express.static(__dirname + '/../client/dist'));
 app.use(cors());
 
+// console.log('this is seq', seq);
 
-//CHANGE THIS!!!!
-app.post('/seq', (req, res) => {
-  console.log('POST:  ', req.body);
-  // Seq.save(res, () => {
-  //   res.send(req.body);
-  //   res.end();
-  // });
+// app.use('/api/seq', seq);
+
+app.get('/', (req, res) => {
+  // console.log('REQUEST', req.body);
+  res.send(JSON.stringify('hello world'));
+});
+
+app.post('/', (req, res) => {
+  console.log('it works');
   res.end();
-});
+})
 
-app.get('/seq', (req, res) => {
-  console.log(req);
+// app.use((req, res, next) => {
+//   let err = new Error ('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
 
-  res.writeHeader(200);
-  res.send('hello world');
-  // res.send('Hello World')
-});
+// app.use((err, req, res, next) => {
+//   res.locals.message = err.message;
+//   res.status(err.status);
+//   res.render('error');
+// });
 
-let port = 1128;
+
+let port = 3000;
 var server = app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });

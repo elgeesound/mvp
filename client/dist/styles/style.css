@@ -1,0 +1,33 @@
+@import url("http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css");
+
+div {
+  padding: 5px
+}
+
+body {
+  opacity: 1;
+  background-image: url(../media/images/hypnotize.png)
+}
+
+body.fade-out {
+  opacity: 0;
+  transition: none;
+}
+
+.canvas {
+  float: left;
+  display: block;
+  background-color: #2E6588;
+  padding: 14px 16px;
+
+}
+
+.btn {
+  border-radius: 0 5px 5px 0;
+  color: black;
+  border-color: #d3d3d3;
+  background: #f8f8f8;
+  padding: .5em 1.7em .2em 1.7em;
+  margin-left: -1px;
+  cursor: pointer;
+}

@@ -55,12 +55,24 @@ class Synth extends React.Component {
     let keys = this.state.keys;
     let fx = Object.keys(this.state.fx);
     return (
-      <div className="keyboard">
-        {keys.map(key => <button key={key.note} onClick={(e) => this.handleMouseKeyboardClick(e)}>{key.note}</button>)}
-        <div className="effectsBar">
-          {fx.map(effect => <button key={effect} onClick={(e) => this.handleEffectsToggle(e)}>{effect}</button>)}
+      <container>
+        <div className="keyboard">
+          {keys.map(key => <button key={key.note} onClick={(e) => this.handleMouseKeyboardClick(e)}>{key.note}</button>)}
+          <div className="effectsBar">
+            {fx.map(effect => <button key={effect} style={{backgroundColor: this.state.fx[effect][0] ? 'green' : 'yellow'}} onClick={(e) => this.handleEffectsToggle(e)}>{effect}</button>)}
+          </div>
+          <button style={{
+            borderWidth:1,
+            borderColor:'rgba(0,0,0,0.2)',
+            alignItems:'center',
+            justifyContent:'center',
+            width:100,
+            height:100,
+            backgroundColor:'#fff',
+            borderRadius:100,
+            }}>REC</button>
         </div>
-      </div>
+      </container>
       )
   }
 }

@@ -1,3 +1,7 @@
 //////// FX ///////
 
+When you toggle the FX render that FX component and redifine the synth to include that fx module in the signal chain.
+
+The toggle of FX should turn the button from red to green.
+
 BitCrusher(bits 1-8)

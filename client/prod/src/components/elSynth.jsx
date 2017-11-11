@@ -1,5 +1,7 @@
 import React from 'react';
 import Tone from 'tone';
+import axios from 'axios';
+var $ = require('jQuery')
 
 class Synth extends React.Component {
   constructor(props) {
@@ -18,6 +20,7 @@ class Synth extends React.Component {
       recording: false,
       recCount: 0,
       currentRecord: [],
+      lastIdx: 0,
       fx: {
           'BitCrusher': [false, 0],
           'Chorus': [false, 0],
@@ -30,8 +33,11 @@ class Synth extends React.Component {
     }
   }
 
+  componentDidMount(){
+    // make a get request to get the lastIdx;
+  }
+
   componentDidUpdate() {
-    console.log('check');
   }
 
   handleMouseKeyboardClick = (e) => {
@@ -62,13 +68,23 @@ class Synth extends React.Component {
     });
 
     if ( (val !== 0 && val % 2 === 0) && this.state.currentRecord[0] !== undefined ) {
-      console.log('recorded');
+      console.log('RECORDED');
+      let data = {
+        'idx': this.state.lastIdx++,
+        'updated': Date.now(),
+        'sequence': this.state.currentRecord
+      }
+      // REFACTOR TO AXIOS POST REQ
+      axios.post('http://localhost:1128/seq', data).then((res) => {console.log('Succesful saved sequence')}).catch((err) => {console.log(err)});
+      // axios({
+      //   method: 'POST',
+      //   url: 'http://127.0.0.1:3000/seq',
+      //   data: data
+      // }).then((res) => {
+      //   console.log('successful post recorded');
+      // }).catch((err) => {console.log(err)})
     }
-
-    console.log(this.state.recCount, 'this is recCount');
-
   };
-
 
   render(){
     let keys = this.state.keys;

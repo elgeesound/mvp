@@ -13,15 +13,6 @@ class App extends React.Component {
   }
 
   record(seq) {
-    $.ajax({
-      type: 'POST',
-      url: 'http://127.0.0.1:1128/seqs',
-      data: seq,
-      datatype: 'application/json',
-      success: (res) => {
-        console.log(`ajax recording: ${seq}`)
-      }
-    })
   }
   render(){
     return (

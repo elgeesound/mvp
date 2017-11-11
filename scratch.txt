@@ -1,0 +1,3 @@
+//////// FX ///////
+
+BitCrusher(bits 1-8)

@@ -1,6 +1,8 @@
 import React from 'react';
 import Tone from 'tone';
 import axios from 'axios';
+import notesImgs from '../../../../resource_pool.js';
+import InterFace from '../../../../lib/interfaceJS/build/interface.js';
 var $ = require('jQuery')
 
 class Synth extends React.Component {
@@ -11,15 +13,17 @@ class Synth extends React.Component {
     this.crusher = new Tone.BitCrusher(4).connect(this.verb);
     this.synth = new Tone.AMSynth().connect(this.crusher);
     this.waves = ['sine', 'triangle', 'pulse', 'saw'];
+    this.timeDivisions = ['1m', '2n', '4n', '8n'];
 
     this.state = {
       scale: ['major', 'minor'],
-      keys: [{note: 'C4'}, {note: 'D4'}, {note: 'E4'}, {note: 'F4'}],
+      keys: [{note: 'C4'}, {note: 'C#4'}, {note: 'D4'}, {note: 'D#4'}, {note: 'E4'}, {note: 'F4'}, {note: 'F#4'}, {note: 'G4',}, {note: 'G#4'}, {note: 'A4'}, {note: 'A#4'}, {note: 'B4'}],
       toggleOn: false,
       currentWave: null,
       recording: false,
       recCount: 0,
       currentRecord: [],
+      currentDivision: '',
       lastIdx: 0,
       fx: {
           'BitCrusher': [false, 0],
@@ -34,6 +38,7 @@ class Synth extends React.Component {
   }
 
   componentDidMount(){
+    console.log(notesImgs);
     // make a get request to get the lastIdx;
   }
 
@@ -42,7 +47,7 @@ class Synth extends React.Component {
 
   handleMouseKeyboardClick = (e) => {
     let hold = e.target.textContent;
-    this.synth.triggerAttackRelease(e.target.textContent, '8n');
+    this.synth.triggerAttackRelease(e.target.textContent, this.state.currenDivision || '8n');
     if (this.state.recording) {
       this.setState({
         currentRecord: [...this.state.currentRecord, hold]
@@ -57,6 +62,10 @@ class Synth extends React.Component {
     fx[e.target.textContent][0] = !this.state.fx[e.target.textContent][0];
     this.setState({fx});
     console.log(this.state.fx);
+  };
+
+  handleTimingDivToggle = (e) => {
+
   };
 
   handleRecToggle = (e) => {
@@ -75,7 +84,14 @@ class Synth extends React.Component {
         'sequence': this.state.currentRecord
       }
       // REFACTOR TO AXIOS POST REQ
-      axios.post('http://localhost:3000/', data).then((res) => {console.log('Succesful saved sequence')}).catch((err) => {console.log(err)});
+      axios.post('http://localhost:3000/', data)
+        .then((res) => {
+          // let currentRecord = [];
+          // this.setState({currentRecord})
+          console.log('Succesful saved sequence', data)
+          console.log('this.state.currentRecord', this.state.currentRecord);
+        })
+          .catch((err) => {console.log(err)});
       // axios({
       //   method: 'POST',
       //   url: 'http://127.0.0.1:3000/seq',
@@ -85,8 +101,8 @@ class Synth extends React.Component {
       // }).catch((err) => {console.log(err)})
     }
   };
-
   render(){
+    let tDivs = this.timeDivisions;
     let keys = this.state.keys;
     let fx = Object.keys(this.state.fx);
     return (
@@ -95,6 +111,8 @@ class Synth extends React.Component {
           {keys.map(key => <button key={key.note} onClick={(e) => this.handleMouseKeyboardClick(e)}>{key.note}</button>)}
           <div className="effectsBar">
             {fx.map(effect => <button key={effect} style={{backgroundColor: this.state.fx[effect][0] ? 'green' : 'yellow'}} onClick={(e) => this.handleEffectsToggle(e)}>{effect}</button>)}
+          </div>
+          <div className="timeDivisions">{tDivs.map((div, idx) => <button key={div} onClick={(e) => this.handleTimingDivToggle(e)}><img src={notesImgs[idx]} /></button>)}
           </div>
           <button
             onClick={(e) => this.handleRecToggle(e)}

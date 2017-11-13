@@ -43,7 +43,6 @@ class Transport extends React.Component {
   }
 
   handleTransportClick = (e) => {
-    console.log('INSIDE THE LOOOOOP this is the active SEQ', this.state.activeSeq);
     let label;
     this.setState({
       isPlaying: !this.state.isPlaying

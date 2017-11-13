@@ -1,8 +1,8 @@
 import React from 'react';
 import Tone from 'tone';
 import axios from 'axios';
-import InterFace from '../../../../lib/interfaceJS/build/interface.js';
 import Transport from './transport.jsx';
+import FX from './fx.jsx';
 var $ = require('jQuery')
 
 class Synth extends React.Component {
@@ -14,7 +14,8 @@ class Synth extends React.Component {
     this.synth = new Tone.Synth({
       "oscillator": {
         "type": "fmsine4",
-        "modulationType": "square"
+        "modulationType": "square",
+        "volume": -20
       }
     }).toMaster();
     this.waves = ['sine', 'triangle', 'pulse', 'saw'];
@@ -76,6 +77,9 @@ class Synth extends React.Component {
   };
 
   handleTimingDivToggle = (e) => {
+    this.setState({
+      currentDivision: e.target.textContent
+    });
 
   };
 
@@ -97,16 +101,17 @@ class Synth extends React.Component {
       // REFACTOR TO AXIOS POST REQ
       axios.post('http://localhost:3000/', data)
         .then((res) => {
-          console.log(this.state.currentRecord, 'PRE')
-          console.log('Succesful saved sequence', data)
-          console.log('POST', this.state.currentRecord);
+          // console.log(this.state.currentRecord, 'PRE')
+          // console.log('Succesful saved sequence', data)
+          // console.log('POST', this.state.currentRecord);
         })
           .catch((err) => {console.log(err)});
     }
   };
 
-  handleSeqToggle = (e) => {
-
+  handleClearSeqToggle = (e) => {
+    let currentRecord = [];
+    this.setState({currentRecord});
   }
   //TEST
   render(){
@@ -118,7 +123,6 @@ class Synth extends React.Component {
       <container>
           <h2 className="tDivTitle">Time Divisions</h2>
           <div className="timeDivisions">{tDivs.map((tDiv, idx) => <button key={tDiv} onClick={(e) => this.handleTimingDivToggle(e)} style={{
-
             fontWeight: tDiv === this.state.currentDivision ? 'bold' : 'normal',
             backgroundColor: tDiv === this.state.currentDivision ? 'red' : 'white'
           }}>{tDiv}</button>)}
@@ -135,6 +139,7 @@ class Synth extends React.Component {
               backgroundColor:'#fff',
               borderRadius:100,
             }}>REC</button>
+            <button onClick={(e) => {this.handleClearSeqToggle(e)}}>CLEAR SEQUENCE</button>
         <Transport currentRecord={this.state.currentRecord} currentDivision={this.state.currentDivision} synth={this.synth}/>
         <div className="keyboard">
           {keys.map(key => <button key={key.note} onClick={(e) => this.handleMouseKeyboardClick(e)}>{key.note}</button>)}
@@ -142,6 +147,7 @@ class Synth extends React.Component {
             {fx.map(effect => <button key={effect} style={{backgroundColor: this.state.fx[effect][0] ? 'green' : 'yellow'}} onClick={(e) => this.handleEffectsToggle(e)}>{effect}</button>)}
           </div>
         </div>
+        <FX synth={this.synth}/>
       </container>
       )
   }

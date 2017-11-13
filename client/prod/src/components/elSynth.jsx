@@ -1,8 +1,8 @@
 import React from 'react';
 import Tone from 'tone';
 import axios from 'axios';
-import notesImgs from '../../../../resource_pool.js';
 import InterFace from '../../../../lib/interfaceJS/build/interface.js';
+import Transport from './transport.jsx';
 var $ = require('jQuery')
 
 class Synth extends React.Component {
@@ -11,7 +11,12 @@ class Synth extends React.Component {
 
     this.verb = new Tone.JCReverb(0.9).toMaster();
     this.crusher = new Tone.BitCrusher(4).connect(this.verb);
-    this.synth = new Tone.AMSynth().connect(this.crusher);
+    this.synth = new Tone.Synth({
+      "oscillator": {
+        "type": "fmsine4",
+        "modulationType": "square"
+      }
+    }).connect(this.crusher);
     this.waves = ['sine', 'triangle', 'pulse', 'saw'];
     this.timeDivisions = ['1m', '2n', '4n', '8n'];
 
@@ -38,8 +43,14 @@ class Synth extends React.Component {
   }
 
   componentDidMount(){
-    console.log(notesImgs);
     // make a get request to get the lastIdx;
+    axios.get('http://localhost:3000/')
+      .then(res => {
+        // this.setState({})
+        console.log('get has been called')
+      }).catch(err => {
+        console.log(err);
+      });
   }
 
   componentDidUpdate() {
@@ -47,7 +58,7 @@ class Synth extends React.Component {
 
   handleMouseKeyboardClick = (e) => {
     let hold = e.target.textContent;
-    this.synth.triggerAttackRelease(e.target.textContent, this.state.currenDivision || '8n');
+    this.synth.triggerAttackRelease(e.target.textContent, this.state.currentDivision || '8n');
     if (this.state.recording) {
       this.setState({
         currentRecord: [...this.state.currentRecord, hold]
@@ -76,6 +87,13 @@ class Synth extends React.Component {
       recCount: val
     });
 
+    // if toggling on and there is a currentRecord reAssign to blank;
+
+    if ( val % 2 === 1 && this.state.currentRecord !== undefined ) {
+      let currentRecord = [];
+      this.setState({currentRecord})
+    }
+
     if ( (val !== 0 && val % 2 === 0) && this.state.currentRecord[0] !== undefined ) {
       console.log('RECORDED');
       let data = {
@@ -86,21 +104,18 @@ class Synth extends React.Component {
       // REFACTOR TO AXIOS POST REQ
       axios.post('http://localhost:3000/', data)
         .then((res) => {
-          // let currentRecord = [];
-          // this.setState({currentRecord})
+          console.log(this.state.currentRecord, 'PRE')
           console.log('Succesful saved sequence', data)
-          console.log('this.state.currentRecord', this.state.currentRecord);
+          console.log('POST', this.state.currentRecord);
         })
           .catch((err) => {console.log(err)});
-      // axios({
-      //   method: 'POST',
-      //   url: 'http://127.0.0.1:3000/seq',
-      //   data: data
-      // }).then((res) => {
-      //   console.log('successful post recorded');
-      // }).catch((err) => {console.log(err)})
     }
   };
+
+  handleSeqToggle = (e) => {
+
+  }
+  //TEST
   render(){
     let tDivs = this.timeDivisions;
     let keys = this.state.keys;
@@ -112,7 +127,8 @@ class Synth extends React.Component {
           <div className="effectsBar">
             {fx.map(effect => <button key={effect} style={{backgroundColor: this.state.fx[effect][0] ? 'green' : 'yellow'}} onClick={(e) => this.handleEffectsToggle(e)}>{effect}</button>)}
           </div>
-          <div className="timeDivisions">{tDivs.map((div, idx) => <button key={div} onClick={(e) => this.handleTimingDivToggle(e)}><img src={notesImgs[idx]} /></button>)}
+          <h2 className="tDivTitle">Time Divisions</h2>
+          <div className="timeDivisions">{tDivs.map((tDiv, idx) => <button key={tDiv} onClick={(e) => this.handleTimingDivToggle(e)}>{tDiv}</button>)}
           </div>
           <button
             onClick={(e) => this.handleRecToggle(e)}
@@ -127,6 +143,7 @@ class Synth extends React.Component {
               borderRadius:100,
             }}>REC</button>
         </div>
+        <Transport currentRecord={this.state.currentRecord} synth={this.synth}/>
       </container>
       )
   }

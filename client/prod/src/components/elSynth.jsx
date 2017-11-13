@@ -18,7 +18,7 @@ class Synth extends React.Component {
       }
     }).connect(this.crusher);
     this.waves = ['sine', 'triangle', 'pulse', 'saw'];
-    this.timeDivisions = ['1m', '2n', '4n', '8n'];
+    this.timeDivisions = ['1m', '2n', '4n', '8n', '16n'];
 
     this.state = {
       scale: ['major', 'minor'],
@@ -28,7 +28,7 @@ class Synth extends React.Component {
       recording: false,
       recCount: 0,
       currentRecord: [],
-      currentDivision: '',
+      currentDivision: '16n',
       lastIdx: 0,
       fx: {
           'BitCrusher': [false, 0],
@@ -120,6 +120,7 @@ class Synth extends React.Component {
     let tDivs = this.timeDivisions;
     let keys = this.state.keys;
     let fx = Object.keys(this.state.fx);
+
     return (
       <container>
         <div className="keyboard">
@@ -128,7 +129,11 @@ class Synth extends React.Component {
             {fx.map(effect => <button key={effect} style={{backgroundColor: this.state.fx[effect][0] ? 'green' : 'yellow'}} onClick={(e) => this.handleEffectsToggle(e)}>{effect}</button>)}
           </div>
           <h2 className="tDivTitle">Time Divisions</h2>
-          <div className="timeDivisions">{tDivs.map((tDiv, idx) => <button key={tDiv} onClick={(e) => this.handleTimingDivToggle(e)}>{tDiv}</button>)}
+          <div className="timeDivisions">{tDivs.map((tDiv, idx) => <button key={tDiv} onClick={(e) => this.handleTimingDivToggle(e)} style={{
+
+            fontWeight: tDiv === this.state.currentDivision ? 'bold' : 'normal',
+            backgroundColor: tDiv === this.state.currentDivision ? 'red' : 'white'
+          }}>{tDiv}</button>)}
           </div>
           <button
             onClick={(e) => this.handleRecToggle(e)}

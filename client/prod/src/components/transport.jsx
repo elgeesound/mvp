@@ -18,7 +18,7 @@ class Transport extends React.Component {
       // Tone.Draw.schedule(function() {
       //   $('#'+note).css("opacity", 1).animate({"opacity": 0}, 300)
       // }, time);
-    }, ['E4', 'E2', 'C4', 'F4']).start(0);
+    }, props.currentRecord).start(0);
 
     this.loop.interval = "16n";
   }
@@ -39,18 +39,13 @@ class Transport extends React.Component {
     this.setState({label})
   };
 
-  hanleTransportKeyPress = (e) => {
-    if (e.keyCode === 13) {
-      console.log('value', e.target.value);
-    }
-  }
 
 
   render(){
     return (
       <div>
 
-        <button className="transport" onClick={(e) => {this.handleTransportClick(e)}} onKeyDown={this.handleTransportKeyPress}>{this.state.label}</button>
+        <button className="transport" onClick={(e) => {this.handleTransportClick(e)}}>{this.state.label}</button>
       </div>
 
       )

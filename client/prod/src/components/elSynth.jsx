@@ -9,14 +9,14 @@ class Synth extends React.Component {
   constructor(props) {
     super(props);
 
-    this.verb = new Tone.JCReverb(0.9).toMaster();
-    this.crusher = new Tone.BitCrusher(4).connect(this.verb);
+    // this.verb = new Tone.JCReverb(0.9).toMaster();
+    // this.crusher = new Tone.BitCrusher(4).connect(this.verb);
     this.synth = new Tone.Synth({
       "oscillator": {
         "type": "fmsine4",
         "modulationType": "square"
       }
-    }).connect(this.crusher);
+    }).toMaster();
     this.waves = ['sine', 'triangle', 'pulse', 'saw'];
     this.timeDivisions = ['1m', '2n', '4n', '8n', '16n'];
 
@@ -27,7 +27,7 @@ class Synth extends React.Component {
       currentWave: null,
       recording: false,
       recCount: 0,
-      currentRecord: [],
+      currentRecord: ['c4', 'd4', 'e4 '],
       currentDivision: '16n',
       lastIdx: 0,
       fx: {
@@ -87,13 +87,6 @@ class Synth extends React.Component {
       recCount: val
     });
 
-    // if toggling on and there is a currentRecord reAssign to blank;
-
-    if ( val % 2 === 1 && this.state.currentRecord !== undefined ) {
-      let currentRecord = [];
-      this.setState({currentRecord})
-    }
-
     if ( (val !== 0 && val % 2 === 0) && this.state.currentRecord[0] !== undefined ) {
       console.log('RECORDED');
       let data = {
@@ -123,11 +116,6 @@ class Synth extends React.Component {
 
     return (
       <container>
-        <div className="keyboard">
-          {keys.map(key => <button key={key.note} onClick={(e) => this.handleMouseKeyboardClick(e)}>{key.note}</button>)}
-          <div className="effectsBar">
-            {fx.map(effect => <button key={effect} style={{backgroundColor: this.state.fx[effect][0] ? 'green' : 'yellow'}} onClick={(e) => this.handleEffectsToggle(e)}>{effect}</button>)}
-          </div>
           <h2 className="tDivTitle">Time Divisions</h2>
           <div className="timeDivisions">{tDivs.map((tDiv, idx) => <button key={tDiv} onClick={(e) => this.handleTimingDivToggle(e)} style={{
 
@@ -147,8 +135,13 @@ class Synth extends React.Component {
               backgroundColor:'#fff',
               borderRadius:100,
             }}>REC</button>
+        <Transport currentRecord={this.state.currentRecord} currentDivision={this.state.currentDivision} synth={this.synth}/>
+        <div className="keyboard">
+          {keys.map(key => <button key={key.note} onClick={(e) => this.handleMouseKeyboardClick(e)}>{key.note}</button>)}
+          <div className="effectsBar">
+            {fx.map(effect => <button key={effect} style={{backgroundColor: this.state.fx[effect][0] ? 'green' : 'yellow'}} onClick={(e) => this.handleEffectsToggle(e)}>{effect}</button>)}
+          </div>
         </div>
-        <Transport currentRecord={this.state.currentRecord} synth={this.synth}/>
       </container>
       )
   }

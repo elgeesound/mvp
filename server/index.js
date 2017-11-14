@@ -15,18 +15,18 @@ var save = require('../database/index.js').save;
 //express
 var app = express();
 app.use(morgan('dev'));
-// app.use(bodyParser.json);
-// app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json);
+app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(express.static(__dirname + '/../client/dist'));
 app.use(cors());
 
 // console.log('this is seq', seq);
 
-// app.use('/api/seq', seq);
+app.use('/api/seq', seq);
 
 app.get('/', (req, res) => {
   // console.log('REQUEST', req.body);
-  res.send(JSON.stringify('hello world'));
+  // res.send(JSON.stringify('hello world'));
 });
 
 app.post('/', (req, res) => {

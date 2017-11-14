@@ -28,7 +28,7 @@ class Synth extends React.Component {
       currentWave: null,
       recording: false,
       recCount: 0,
-      currentRecord: ['c4', 'd4', 'e4 '],
+      currentRecord: [],
       currentDivision: '16n',
       lastIdx: 0,
       fx: {
@@ -45,9 +45,12 @@ class Synth extends React.Component {
 
   componentDidMount(){
     // make a get request to get the lastIdx;
-    axios.get('http://localhost:3000/')
+    axios.get('http://localhost:3000/api/seq')
       .then(res => {
-        // this.setState({})
+        // this.setState({
+        //   lastIdx: res.id,
+        //   recCount: res.id++
+        // });
         console.log('get has been called')
       }).catch(err => {
         console.log(err);
@@ -74,6 +77,7 @@ class Synth extends React.Component {
     fx[e.target.textContent][0] = !this.state.fx[e.target.textContent][0];
     this.setState({fx});
     console.log(this.state.fx);
+    // need to pass the val back down to bypass/engage
   };
 
   handleTimingDivToggle = (e) => {
@@ -99,8 +103,10 @@ class Synth extends React.Component {
         'sequence': this.state.currentRecord
       }
       // REFACTOR TO AXIOS POST REQ
-      axios.post('http://localhost:3000/', data)
+      axios.post('http://localhost:3000/api/seq', data)
         .then((res) => {
+          console.log('SUCCESS')
+          res.send(JSON.stringify(data));
           // console.log(this.state.currentRecord, 'PRE')
           // console.log('Succesful saved sequence', data)
           // console.log('POST', this.state.currentRecord);

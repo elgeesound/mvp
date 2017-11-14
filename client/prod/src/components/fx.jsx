@@ -45,9 +45,9 @@ class FX extends React.Component {
         <div>
           <span>Chorus</span>
           <Slider min={0.0} max={1.0} step={0.1} className="chorusSlider" style={{height: 150}} axis="x" onChange={(e, newVal) => this.handleChorusSend(e, newVal)}></Slider>
-          <span>WaveShaper **** CAREFUL use 25% or less</span>
+          <span>WaveShaper **** CAREFUL use 25% or less vol increase</span>
           <Slider min={0} max={100} step={1} className="chebySlider" style={{height: 150}} axis="x" onChange={(e, newVal) => this.handleChebySend(e, newVal)}></Slider>
-          <span>Distortion</span>
+          <span>Distortion *** CAREFUL unhandled vol increase</span>
           <Slider min={0.0} max={1.0} step={0.1} className="distortSlider" style={{height: 150}} axis="x" onChange={(e, newVal) => this.handleDistortSend(e, newVal)}></Slider>
           <span>Reverb</span>
           <Slider min={0.0} max={1.0} step={0.1} className="verbSlider" style={{height: 150}} axis="x" onChange={(e, newVal) => this.handleVerbSend(e, newVal)}></Slider>
